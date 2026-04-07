@@ -1165,9 +1165,18 @@ function exportXLSX() {
   let sy=0;
   document.addEventListener('touchstart',e=>{sy=e.touches[0].clientY;},{passive:true});
   document.addEventListener('touchmove',e=>{
-    const el=e.target.closest('.page,.sheet');
-    if(!el){e.preventDefault();return;}
-    if(el.scrollTop<=0&&e.touches[0].clientY-sy>0)e.preventDefault();
+    // Find the scrollable ancestor
+    let el=e.target;
+    let scrollable=null;
+    while(el&&el!==document.body){
+      if(el.scrollHeight>el.clientHeight&&getComputedStyle(el).overflowY!=='hidden'){scrollable=el;break;}
+      el=el.parentElement;
+    }
+    // No scrollable container — block (prevents background page refresh)
+    if(!scrollable){e.preventDefault();return;}
+    // At top and pulling DOWN — block pull-to-refresh only
+    if(scrollable.scrollTop<=0&&e.touches[0].clientY-sy>0){e.preventDefault();}
+    // Otherwise allow normal scroll — do nothing
   },{passive:false});
 })();
  
