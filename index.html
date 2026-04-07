@@ -1162,6 +1162,34 @@ function exportXLSX() {
 }
  
  
+// ── PULL-TO-REFRESH BLOCK (minimal, no jank) ─────────
+// Chrome Android ignores CSS overscroll-behavior on position:fixed elements
+// This lightweight handler only checks scrollTop — no getComputedStyle = no jank
+(function(){
+  let startY = 0;
+  document.addEventListener('touchstart', function(e){
+    startY = e.touches[0].clientY;
+  }, {passive: true});
+ 
+  document.addEventListener('touchmove', function(e){
+    if (!e.cancelable) return; // browser already handling — skip
+    const dy = e.touches[0].clientY - startY;
+    if (dy <= 0) return; // scrolling UP or horizontal — never block
+ 
+    // Walk up to find scrollable container — only cheap property checks
+    let el = e.target;
+    while (el && el !== document.documentElement) {
+      if (el.scrollTop > 0) return; // mid-page — user is scrolling up, allow
+      if (el.scrollHeight > el.clientHeight + 1) {
+        e.preventDefault(); // at top of scrollable container, pulling down — block
+        return;
+      }
+      el = el.parentElement;
+    }
+    e.preventDefault(); // no scrollable parent found — block
+  }, {passive: false});
+})();
+ 
 // ── OVERLAY BACKDROP CLOSE ───────────────────────────
 ['addOv','editOv','payOv','addTgtOv','nmOv'].forEach(id=>{
   const el=document.getElementById(id);
@@ -1175,3 +1203,4 @@ boot();
 </script>
 </body>
 </html>
+ 
