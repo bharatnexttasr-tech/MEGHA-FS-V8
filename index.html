@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" style="overscroll-behavior:none;overscroll-behavior-y:none;height:100%;overflow:hidden">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
@@ -29,9 +29,9 @@
   --mono:'JetBrains Mono',monospace;
   --sans:'Inter',sans-serif;
 }
-html,body{height:100%;overflow:hidden;overscroll-behavior:none;overscroll-behavior-y:none}
+html,body{height:100%;overflow:hidden;overscroll-behavior:none!important;overscroll-behavior-y:none!important;touch-action:pan-x pan-y}
 body{font-family:var(--sans);background:var(--cream);color:var(--t1)}
-.page{display:none;position:fixed;inset:56px 0 62px;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:none;overscroll-behavior-y:none;padding:14px 14px 20px}
+.page{display:none;position:fixed;inset:56px 0 62px;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:none!important;overscroll-behavior-y:none!important;touch-action:pan-y;padding:14px 14px 20px}
 .page.active{display:block}
  
 /* TOP BAR */
@@ -1174,8 +1174,8 @@ function exportXLSX() {
       const overflow=style.overflowY;
       const canScroll=(overflow==='auto'||overflow==='scroll')&&node.scrollHeight>node.clientHeight;
       if(canScroll){
-        // Allow scroll down always; block pull-up at top
-        if(node.scrollTop===0&&dy>0){e.preventDefault();}
+        // Block pull-to-refresh when at top pulling down (use <=1 for sub-pixel)
+        if(node.scrollTop<=1&&dy>0){e.preventDefault();}
         return;
       }
       node=node.parentElement;
