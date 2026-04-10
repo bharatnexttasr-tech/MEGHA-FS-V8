@@ -32,7 +32,7 @@ body{font-family:'Noto Sans',sans-serif;background:var(--bg);color:var(--t1);pos
 .app{max-width:480px;margin:0 auto;height:100%;position:relative}
  
 /* PAGES */
-.page{display:none;position:absolute;inset:56px 0 var(--bh);overflow-y:scroll;-webkit-overflow-scrolling:touch;overscroll-behavior-y:none;padding:12px 12px calc(var(--bh) + 8px);scroll-behavior:auto}
+.page{display:none;position:absolute;inset:56px 0 var(--bh);overflow-y:scroll;-webkit-overflow-scrolling:touch;overscroll-behavior-y:none;padding:12px 12px calc(var(--bh) + 8px);scroll-behavior:auto;will-change:scroll-position;transform:translateZ(0);-webkit-transform:translateZ(0)}
 .page.active{display:block}
  
 /* TOP BAR */
@@ -62,7 +62,7 @@ body{font-family:'Noto Sans',sans-serif;background:var(--bg);color:var(--t1);pos
 .totop.show{display:flex}
  
 /* CARDS */
-.card{background:var(--card);border-radius:var(--r);padding:14px;margin-bottom:10px;box-shadow:var(--sh)}
+.card{background:var(--card);border-radius:var(--r);padding:14px;margin-bottom:10px;box-shadow:var(--sh);contain:layout style}
 .card-hdr{font-family:'Baloo 2',cursive;font-size:.78rem;font-weight:700;color:var(--t2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between}
  
 /* STAT GRID */
@@ -1041,4 +1041,3 @@ boot();
 </script>
 </body>
 </html>
- 
